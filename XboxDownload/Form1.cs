@@ -191,11 +191,11 @@ namespace XboxDownload
                 IsBalloon = true
             };
             toolTip1.SetToolTip(this.labelDNS, "常用 DNS 服务器\n114.114.114.114 (114)\n180.76.76.76 (百度)\n223.5.5.5 (阿里)\n119.29.29.29 (腾讯)\n208.67.220.220 (OpenDns)\n8.8.8.8 (Google)\n168.126.63.1 (韩国)");
-            toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nassets1.xboxlive.com\nassets2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\n以上域名不能使用 cn IP");
-            toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn\n以上域名可以共用 com IP");
+            toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nassets1.xboxlive.com\nassets2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\n\n以上域名不能使用 cn IP");
+            toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn\n\n以上域名可以共用 com IP");
             toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
-            toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
+            toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net\n\n速度不正常请点击右下角 “修复 EA app”");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             
@@ -787,9 +787,8 @@ namespace XboxDownload
                         if (Properties.Settings.Default.EACDN)
                         {
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " api1.origin.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api2.origin.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api3.origin.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api4.origin.com");
+                            //sb.AppendLine(Properties.Settings.Default.LocalIP + " ssl-lvlt.cdn.ea.com");
+                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
                         }
                         if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
                         {
@@ -906,7 +905,7 @@ namespace XboxDownload
             Clipboard.SetDataObject(text);
             if (Regex.IsMatch(text, @"^https?://(origin-a\.akamaihd\.net|ssl-lvlt\.cdn\.ea\.com|lvlt\.cdn\.ea\.com)"))
             {
-                MessageBox.Show("EA游戏下载地址未连接的情况下会在5分钟后过期，请尽快开始下载。\n\n离线包安装方法：下载完成后删除安装目录下的所有文件，把解压缩文件复制到安装目录，回到 EA app 或者 Origin 选择继续下载，等待游戏验证完成后即可。\n\nPS: 下载软件推荐使用IDM或者FDM，可以随时修改下载地址。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("离线包安装方法：下载完成后删除安装目录下的所有文件，把解压缩文件复制到安装目录，回到 EA app 或者 Origin 选择继续下载，等待游戏验证完成后即可。\n\nPS: 下载软件推荐使用IDM或者FDM，可以随时修改下载地址。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1831,7 +1830,7 @@ namespace XboxDownload
                     {
                         LinkLabel lb1 = new LinkLabel()
                         {
-                            Tag = "https://origin-a.akamaihd.net/EA-Desktop-Client-Download/installer-releases/EAapp-12.0.193.5134-831.msi",
+                            Tag = "https://origin-a.akamaihd.net/EA-Desktop-Client-Download/installer-releases/EAapp-12.0.210.5162-898.msi",
                             Text = "EA app",
                             AutoSize = true,
                             Parent = this.flpTestUrl
@@ -1839,12 +1838,20 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb2 = new LinkLabel()
                         {
+                            Tag = "https://origin-a.akamaihd.net/eamaster/s/shift/hazelight/nuts/fg__ww_us/nutspcfg__ww_usproduction_440__ittakestwowin64563shippingcl1038014913b37bc71943649f843ece54a4046d.zip?sauth=1652284498_5823130aaefd74083c01a202710dec09",
+                            Text = "双人成行",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb3 = new LinkLabel()
+                        {
                             Tag = "http://blzddist1-a.akamaihd.net/tpr/odin/data/c9/7b/c97b6e3ca2079a2b8e9dea3efdd1ea90",
                             Text = "Call of Duty: Warzone(暴雪战网)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
-                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                     }
                     break;
                 case "epicgames-download1-1251447533.file.myqcloud.com":

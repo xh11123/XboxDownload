@@ -163,9 +163,6 @@ namespace XboxDownload
                                     switch (_hosts)
                                     {
                                         case "api1.origin.com":
-                                        case "api2.origin.com":
-                                        case "api3.origin.com":
-                                        case "api4.origin.com":
                                             if (Properties.Settings.Default.EAStore)
                                             {
                                                 if (string.IsNullOrEmpty(ipApiOrigin))

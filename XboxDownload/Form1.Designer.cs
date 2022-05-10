@@ -31,10 +31,10 @@ namespace XboxDownload
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmUpdate = new System.Windows.Forms.ToolStripMenuItem();
@@ -382,14 +382,14 @@ namespace XboxDownload
             // tsmProductManual
             // 
             this.tsmProductManual.Name = "tsmProductManual";
-            this.tsmProductManual.Size = new System.Drawing.Size(270, 34);
+            this.tsmProductManual.Size = new System.Drawing.Size(254, 34);
             this.tsmProductManual.Text = "使用说明";
             this.tsmProductManual.Click += new System.EventHandler(this.TsmProductManual_Click);
             // 
             // tsmDownloadStop
             // 
             this.tsmDownloadStop.Name = "tsmDownloadStop";
-            this.tsmDownloadStop.Size = new System.Drawing.Size(270, 34);
+            this.tsmDownloadStop.Size = new System.Drawing.Size(254, 34);
             this.tsmDownloadStop.Tag = "https://github.com/skydevil88/XboxDownload/issues/21#issuecomment-999693623";
             this.tsmDownloadStop.Text = "安装停止解决方法";
             this.tsmDownloadStop.Click += new System.EventHandler(this.TsmTeaching_Click);
@@ -401,7 +401,7 @@ namespace XboxDownload
             this.tsmTeaching2,
             this.tsmTeachingOpenWrt});
             this.tsmTeaching.Name = "tsmTeaching";
-            this.tsmTeaching.Size = new System.Drawing.Size(270, 34);
+            this.tsmTeaching.Size = new System.Drawing.Size(254, 34);
             this.tsmTeaching.Text = "视频教程";
             // 
             // tsmTeaching1
@@ -431,7 +431,7 @@ namespace XboxDownload
             // tsmAbout
             // 
             this.tsmAbout.Name = "tsmAbout";
-            this.tsmAbout.Size = new System.Drawing.Size(270, 34);
+            this.tsmAbout.Size = new System.Drawing.Size(254, 34);
             this.tsmAbout.Text = "关于";
             this.tsmAbout.Click += new System.EventHandler(this.TsmAbout_Click);
             // 
@@ -1119,7 +1119,7 @@ namespace XboxDownload
             this.tabSpeedTest.Location = new System.Drawing.Point(4, 28);
             this.tabSpeedTest.Name = "tabSpeedTest";
             this.tabSpeedTest.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSpeedTest.Size = new System.Drawing.Size(1470, 815);
+            this.tabSpeedTest.Size = new System.Drawing.Size(1470, 810);
             this.tabSpeedTest.TabIndex = 1;
             this.tabSpeedTest.Text = "测速";
             this.tabSpeedTest.UseVisualStyleBackColor = true;
@@ -1130,7 +1130,7 @@ namespace XboxDownload
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox4.Location = new System.Drawing.Point(3, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1464, 677);
+            this.groupBox4.Size = new System.Drawing.Size(1464, 672);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "IP 列表";
@@ -1152,7 +1152,7 @@ namespace XboxDownload
             this.dgvIpList.MultiSelect = false;
             this.dgvIpList.Name = "dgvIpList";
             this.dgvIpList.RowHeadersWidth = 35;
-            this.dgvIpList.Size = new System.Drawing.Size(1458, 650);
+            this.dgvIpList.Size = new System.Drawing.Size(1458, 645);
             this.dgvIpList.TabIndex = 1;
             this.dgvIpList.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvIpList_CellMouseDoubleClick);
             this.dgvIpList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvIpList_CellMouseDown);
@@ -1183,9 +1183,9 @@ namespace XboxDownload
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle13.Format = "N0";
+            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle13;
             this.Col_TTL.HeaderText = "TTL";
             this.Col_TTL.MinimumWidth = 8;
             this.Col_TTL.Name = "Col_TTL";
@@ -1193,9 +1193,9 @@ namespace XboxDownload
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle14.Format = "N0";
+            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle14;
             this.Col_RoundtripTime.HeaderText = "响应时间(ms)";
             this.Col_RoundtripTime.MinimumWidth = 8;
             this.Col_RoundtripTime.Name = "Col_RoundtripTime";
@@ -1203,9 +1203,9 @@ namespace XboxDownload
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle15.Format = "N2";
+            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle15;
             this.Col_Speed.HeaderText = "下载速度(MB/s)";
             this.Col_Speed.MinimumWidth = 8;
             this.Col_Speed.Name = "Col_Speed";
@@ -1237,7 +1237,7 @@ namespace XboxDownload
             this.panel2.Controls.Add(this.ckbChinaTelecom);
             this.panel2.Controls.Add(this.linkImportIPManual);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(3, 680);
+            this.panel2.Location = new System.Drawing.Point(3, 675);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1464, 132);
             this.panel2.TabIndex = 2;
@@ -1489,7 +1489,7 @@ namespace XboxDownload
             this.tabHosts.Location = new System.Drawing.Point(4, 28);
             this.tabHosts.Name = "tabHosts";
             this.tabHosts.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHosts.Size = new System.Drawing.Size(1470, 815);
+            this.tabHosts.Size = new System.Drawing.Size(1470, 810);
             this.tabHosts.TabIndex = 2;
             this.tabHosts.Text = "域名";
             this.tabHosts.UseVisualStyleBackColor = true;
@@ -1500,7 +1500,7 @@ namespace XboxDownload
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(3, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1464, 758);
+            this.groupBox3.Size = new System.Drawing.Size(1464, 753);
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "自定义挟持域名(修改后按保存生效，删除单条记录点击左边序号然后按delete键)";
@@ -1518,7 +1518,7 @@ namespace XboxDownload
             this.dgvHosts.MultiSelect = false;
             this.dgvHosts.Name = "dgvHosts";
             this.dgvHosts.RowHeadersWidth = 35;
-            this.dgvHosts.Size = new System.Drawing.Size(1458, 731);
+            this.dgvHosts.Size = new System.Drawing.Size(1458, 726);
             this.dgvHosts.TabIndex = 1;
             this.dgvHosts.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.DgvHosts_CellValidating);
             this.dgvHosts.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvHosts_CellValueChanged);
@@ -1570,7 +1570,7 @@ namespace XboxDownload
             this.panel3.Controls.Add(this.butHostReset);
             this.panel3.Controls.Add(this.butHostSave);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(3, 761);
+            this.panel3.Location = new System.Drawing.Point(3, 756);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1464, 51);
             this.panel3.TabIndex = 2;
@@ -1628,7 +1628,7 @@ namespace XboxDownload
             this.tabHardDisk.Location = new System.Drawing.Point(4, 28);
             this.tabHardDisk.Name = "tabHardDisk";
             this.tabHardDisk.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHardDisk.Size = new System.Drawing.Size(1470, 815);
+            this.tabHardDisk.Size = new System.Drawing.Size(1470, 810);
             this.tabHardDisk.TabIndex = 3;
             this.tabHardDisk.Text = "硬盘";
             this.tabHardDisk.UseVisualStyleBackColor = true;
@@ -1659,7 +1659,7 @@ namespace XboxDownload
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(3, 373);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(1464, 439);
+            this.groupBox6.Size = new System.Drawing.Size(1464, 434);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "文件信息";
@@ -1925,8 +1925,8 @@ namespace XboxDownload
             // 
             // Col_Size
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Col_Size.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Col_Size.DefaultCellStyle = dataGridViewCellStyle16;
             this.Col_Size.HeaderText = "容量";
             this.Col_Size.MinimumWidth = 8;
             this.Col_Size.Name = "Col_Size";
@@ -1997,7 +1997,7 @@ namespace XboxDownload
             this.tabGames.Location = new System.Drawing.Point(4, 28);
             this.tabGames.Name = "tabGames";
             this.tabGames.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGames.Size = new System.Drawing.Size(1470, 815);
+            this.tabGames.Size = new System.Drawing.Size(1470, 810);
             this.tabGames.TabIndex = 8;
             this.tabGames.Text = "游戏";
             this.tabGames.UseVisualStyleBackColor = true;
@@ -2024,7 +2024,7 @@ namespace XboxDownload
             this.gbGameInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbGameInfo.Location = new System.Drawing.Point(3, 143);
             this.gbGameInfo.Name = "gbGameInfo";
-            this.gbGameInfo.Size = new System.Drawing.Size(1464, 669);
+            this.gbGameInfo.Size = new System.Drawing.Size(1464, 664);
             this.gbGameInfo.TabIndex = 1;
             this.gbGameInfo.TabStop = false;
             this.gbGameInfo.Text = "信息";
@@ -2042,7 +2042,7 @@ namespace XboxDownload
             this.lvGame.HideSelection = false;
             this.lvGame.Location = new System.Drawing.Point(3, 374);
             this.lvGame.Name = "lvGame";
-            this.lvGame.Size = new System.Drawing.Size(1458, 292);
+            this.lvGame.Size = new System.Drawing.Size(1458, 287);
             this.lvGame.TabIndex = 2;
             this.lvGame.UseCompatibleStateImageBehavior = false;
             this.lvGame.View = System.Windows.Forms.View.Details;
@@ -2437,7 +2437,7 @@ namespace XboxDownload
             this.gpEACdn.Controls.Add(this.rbEACdn2);
             this.gpEACdn.Controls.Add(this.rbEACdn1);
             this.gpEACdn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gpEACdn.Location = new System.Drawing.Point(0, 269);
+            this.gpEACdn.Location = new System.Drawing.Point(0, 284);
             this.gpEACdn.Name = "gpEACdn";
             this.gpEACdn.Size = new System.Drawing.Size(1470, 136);
             this.gpEACdn.TabIndex = 2;
@@ -2461,9 +2461,9 @@ namespace XboxDownload
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(765, 24);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(458, 90);
+            this.label3.Size = new System.Drawing.Size(476, 90);
             this.label3.TabIndex = 26;
-            this.label3.Text = "使用说明：\r\n1. 选择CDN服务器后按应用。\r\n2. 重启Origin生效。\r\n\r\nPS: 服务中勾选“指定CDN Akamai”，此设置将被忽略。";
+            this.label3.Text = "使用说明：\r\n1. 选择CDN服务器后按应用。\r\n2. 重启Origin生效。\r\n\r\n提示：服务中勾选“指定CDN Akamai”，此设置将被忽略。";
             // 
             // butEACdn
             // 
@@ -2533,7 +2533,7 @@ namespace XboxDownload
             this.groupBox8.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox8.Location = new System.Drawing.Point(0, 159);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(1470, 110);
+            this.groupBox8.Size = new System.Drawing.Size(1470, 125);
             this.groupBox8.TabIndex = 1;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "离线安装微软商店应用软件";
@@ -2541,7 +2541,7 @@ namespace XboxDownload
             // linkAppxRefreshDrive
             // 
             this.linkAppxRefreshDrive.AutoSize = true;
-            this.linkAppxRefreshDrive.Location = new System.Drawing.Point(220, 68);
+            this.linkAppxRefreshDrive.Location = new System.Drawing.Point(220, 73);
             this.linkAppxRefreshDrive.Name = "linkAppxRefreshDrive";
             this.linkAppxRefreshDrive.Size = new System.Drawing.Size(44, 18);
             this.linkAppxRefreshDrive.TabIndex = 26;
@@ -2554,13 +2554,14 @@ namespace XboxDownload
             this.label50.AutoSize = true;
             this.label50.Location = new System.Drawing.Point(765, 24);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(377, 54);
+            this.label50.Size = new System.Drawing.Size(602, 90);
             this.label50.TabIndex = 25;
-            this.label50.Text = "使用说明：\r\n1. 选择已经下载完成微软商店应用或者游戏。\r\n2. 然后点击安装。";
+            this.label50.Text = "使用说明：\r\n1. 选择已经下载完成微软商店应用或者游戏。\r\n2. 然后点击安装，等待进度条完成后重启Xbox应用。\r\n\r\n提示：游戏安装文件夹可以在Xbox“设" +
+    "置->常规->游戏安装选项”中更改。";
             // 
             // butAppxInstall
             // 
-            this.butAppxInstall.Location = new System.Drawing.Point(568, 62);
+            this.butAppxInstall.Location = new System.Drawing.Point(568, 67);
             this.butAppxInstall.Name = "butAppxInstall";
             this.butAppxInstall.Size = new System.Drawing.Size(140, 30);
             this.butAppxInstall.TabIndex = 24;
@@ -2572,7 +2573,7 @@ namespace XboxDownload
             // 
             this.cbAppxDrive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAppxDrive.FormattingEnabled = true;
-            this.cbAppxDrive.Location = new System.Drawing.Point(94, 64);
+            this.cbAppxDrive.Location = new System.Drawing.Point(94, 69);
             this.cbAppxDrive.Name = "cbAppxDrive";
             this.cbAppxDrive.Size = new System.Drawing.Size(121, 26);
             this.cbAppxDrive.TabIndex = 23;
@@ -2580,7 +2581,7 @@ namespace XboxDownload
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(8, 68);
+            this.label48.Location = new System.Drawing.Point(8, 73);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(80, 18);
             this.label48.TabIndex = 22;
