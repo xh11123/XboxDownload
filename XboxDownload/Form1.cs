@@ -133,9 +133,8 @@ namespace XboxDownload
 
             Form1.lsMarket.AddRange((new List<Market>
             {
-                new Market("新加坡", "SG", "zh-SG"),
-                new Market("香港", "HK", "zh-HK"),
                 new Market("台湾", "TW", "zh-TW"),
+                new Market("香港", "HK", "zh-HK"),
                 new Market("日本", "JP", "ja-JP"),
                 new Market("美国", "US", "en-US"),
 
@@ -172,7 +171,7 @@ namespace XboxDownload
                 new Market("西班牙", "ES", "es-ES"),
                 new Market("希腊", "GR", "el-GR"),
                 //new Market("香港", "HK", "zh-HK"),
-                //new Market("新加坡", "SG", "zh-SG"),
+                new Market("新加坡", "SG", "en-SG"),
                 new Market("新西兰", "NZ", "en-NZ"),
                 new Market("匈牙利", "HU", "hu-HU"),
                 new Market("以色列", "IL", "he-IL"),
@@ -905,7 +904,7 @@ namespace XboxDownload
             Clipboard.SetDataObject(text);
             if (Regex.IsMatch(text, @"^https?://(origin-a\.akamaihd\.net|ssl-lvlt\.cdn\.ea\.com|lvlt\.cdn\.ea\.com)"))
             {
-                MessageBox.Show("离线包安装方法：下载完成后删除安装目录下的所有文件，把解压缩文件复制到安装目录，回到 EA app 或者 Origin 选择继续下载，等待游戏验证完成后即可。\n\nPS: 下载软件推荐使用IDM或者FDM，可以随时修改下载地址。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("离线包安装方法：下载完成后删除安装目录下的所有文件，把解压缩文件复制到安装目录，回到 EA app 或者 Origin 选择继续下载，等待游戏验证完成后即可。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1026,7 +1025,7 @@ namespace XboxDownload
                 case "xvcf1.xboxlive.com":
                 case "xvcf2.xboxlive.com":
                     tsmUseIPXbox.Text = "指定 com 下载域名 IP";
-                    tsmUseIPXbox.Visible = true;
+                    tsmUseIPXbox.Visible = tsmUseIPXbox2.Visible = true;
                     break;
                 case "assets1.xboxlive.cn":
                 case "assets2.xboxlive.cn":
@@ -1034,7 +1033,7 @@ namespace XboxDownload
                 case "dlassets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
-                    tsmUseIPXbox.Text = "指定 cn 下载域名 IP";
+                    tsmUseIPXbox.Text = "指定 cn 下载域名 IP (碰到安装停止可使用国际域名测速)";
                     tsmUseIPXbox.Visible = true;
                     break;
                 case "dl.delivery.mp.microsoft.com":
@@ -1087,6 +1086,11 @@ namespace XboxDownload
                         tbCnIP.Text = ip;
                         tbCnIP.Focus();
                     }
+                    break;
+                case "tsmUseIPXbox2":
+                    tbComIP.Text = ip;
+                    tbCnIP.Text = ip;
+                    tbComIP.Focus();
                     break;
                 case "tsmUseIPApp":
                     tbAppIP.Text = ip;
@@ -1237,11 +1241,12 @@ namespace XboxDownload
                     case "origin-a.akamaihd.net":
                     case "blzddist1-a.akamaihd.net":
                     case "atum.hac.lp1.d4c.nintendo.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+((origin-a|blzddist1-a)\.akamaihd\.net|atum\.hac\.lp1\.d4c\.nintendo\.net)\s+# " + Form1.appName + "\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+((origin-a|blzddist1-a)\.akamaihd\.net|ssl-lvlt\.cdn\.ea\.com|atum\.hac\.lp1\.d4c\.nintendo\.net)\s+# " + Form1.appName + "\r\n", "");
+                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # " + Form1.appName);
                         sb.AppendLine(ip + " origin-a.akamaihd.net # " + Form1.appName);
                         sb.AppendLine(ip + " blzddist1-a.akamaihd.net # " + Form1.appName);
                         sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # " + Form1.appName);
-                        msg = "系统Hosts文件写入成功，以下规则已写入系统Hosts文件\n\n" + sb.ToString() + "\nEA app & Origin CDN服务器使用 Akamai 可以直接加速，不需要启动下载助手监听。Origin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中切换使用 Akamai，EA app 暂时不能切换，如果你的 EA app 不是使用Akamai CDN服务器，此方法无效，请使用监听方式加速。\n\n暴雪战网只能用监听方式加速。";
+                        msg = "系统Hosts文件写入成功，以下规则已写入系统Hosts文件\n\n" + sb.ToString() + "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网只能用监听方式加速。";
                         break;
                     case "epicgames-download1-1251447533.file.myqcloud.com":
                         sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+" + host + @"\s+# " + Form1.appName + "\r\n", "");
@@ -1370,12 +1375,14 @@ namespace XboxDownload
                 case "blzddist1-a.akamaihd.net":
                     if (tsmi.Name == "tsmDNSmasp")
                     {
+                        sb.AppendLine("address=/ssl-lvlt.cdn.ea.com/0.0.0.0");
                         sb.AppendLine("address=/origin-a.akamaihd.net/" + ip);
                         sb.AppendLine("address=/blzddist1-a.akamaihd.net/" + ip);
                         sb.AppendLine("address=/atum.hac.lp1.d4c.nintendo.net/" + ip);
                     }
                     else
                     {
+                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
                         sb.AppendLine(ip + " origin-a.akamaihd.net");
                         sb.AppendLine(ip + " blzddist1-a.akamaihd.net");
                         sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net");
@@ -1830,28 +1837,20 @@ namespace XboxDownload
                     {
                         LinkLabel lb1 = new LinkLabel()
                         {
-                            Tag = "https://origin-a.akamaihd.net/EA-Desktop-Client-Download/installer-releases/EAapp-12.0.210.5162-898.msi",
-                            Text = "EA app",
+                            Tag = "https://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe",
+                            Text = "Origin",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb2 = new LinkLabel()
                         {
-                            Tag = "https://origin-a.akamaihd.net/eamaster/s/shift/hazelight/nuts/fg__ww_us/nutspcfg__ww_usproduction_440__ittakestwowin64563shippingcl1038014913b37bc71943649f843ece54a4046d.zip?sauth=1652284498_5823130aaefd74083c01a202710dec09",
-                            Text = "双人成行",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        LinkLabel lb3 = new LinkLabel()
-                        {
                             Tag = "http://blzddist1-a.akamaihd.net/tpr/odin/data/c9/7b/c97b6e3ca2079a2b8e9dea3efdd1ea90",
                             Text = "Call of Duty: Warzone(暴雪战网)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
-                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                     }
                     break;
                 case "epicgames-download1-1251447533.file.myqcloud.com":
@@ -2538,7 +2537,6 @@ namespace XboxDownload
             }
             else
             {
-                //Match result = Regex.Match(url, @"/(?<productId>[a-zA-Z0-9]{12})$|/(?<productId>[a-zA-Z0-9]{12})(\?|#)|^(?<productId>[a-zA-Z0-9]{12})$");
                 Match result = Regex.Match(url, @"/(?<productId>[a-zA-Z0-9]{12})/?$|/(?<productId>[a-zA-Z0-9]{12})(\?|#)|/(?<productId>[a-zA-Z0-9]{12})/0001|^(?<productId>[a-zA-Z0-9]{12})$");
                 if (result.Success)
                 {
@@ -2558,12 +2556,7 @@ namespace XboxDownload
                     this.cbGameBundled.SelectedIndexChanged -= new EventHandler(this.CbGameBundled_SelectedIndexChanged);
                     Market market = (Market)cbGameMarket.SelectedItem;
                     string productId = result.Groups["productId"].Value.ToUpperInvariant();
-                    if (Regex.IsMatch(url, "^https?://www.microsoft.com(/[a-zA-Z]{2}-[a-zA-Z]{2})?/p/"))
-                    {
-                        url = Regex.Replace(url, @"(/[a-zA-Z]{2}-[a-zA-Z]{2})?/p/", "/" + market.lang + "/p/");
-                        tbGameUrl.Text = url;
-                    }
-                    else url = "https://www.microsoft.com/" + market.lang + "/p/_/" + productId;
+                    url = "https://www.xbox.com/" + market.lang + "/games/store/_/" + productId;
                     linkGameWebsite.Links[0].LinkData = url;
                     ThreadPool.QueueUserWorkItem(delegate { XboxStore(market, productId); });
                 }
@@ -2668,7 +2661,7 @@ namespace XboxDownload
                     language = "zh-TW";
                     break;
                 default:
-                    language = "zh-SG";
+                    language = "zh-TW";
                     break;
             }
             string url = "https://www.microsoft.com/services/api/v3/suggest?market=" + language + "&clientId=7F27B536-CF6B-4C65-8638-A0F8CBDFCA65&sources=Microsoft-Terms%2CIris-Products%2CDCatAll-Products&filter=ExcludeDCatProducts%3ADCatDevices-Products%2CDCatSoftware-Products%2CDCatBundles-Products%2BClientType%3AStoreWeb&counts=5%2C1%2C5&query=" + ClassWeb.UrlEncode(query);
@@ -2798,7 +2791,16 @@ namespace XboxDownload
             if (cb.SelectedIndex <= 0) return;
             Product product = (Product)cb.SelectedItem;
             if (product.id == "0") return;
-            tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + product.id;
+            tbGameUrl.Text = "https://www.xbox.com/zh-tw/games/store/bugsnax/" + product.id;
+            foreach (var item in cbGameMarket.Items)
+            {
+                Market market = (Market)item;
+                if (market.lang == "zh-TW")
+                {
+                    cbGameMarket.SelectedItem = item;
+                    break;
+                }
+            }
             if (butGame.Enabled) ButGame_Click(null, null);
         }
 
@@ -2841,11 +2843,11 @@ namespace XboxDownload
                 string keyCopydatesnowgame1 = result.Groups["keyCopydatesnowgame1"].Value;
                 string keyCopydatesnowgame2 = result.Groups["keyCopydatesnowgame2"].Value;
                 string keyCopydatesnowgame3 = result.Groups["keyCopydatesnowgame3"].Value;
-                if (lengue == "en-sg")
+                if (lengue == "zh-tw")
                 {
-                    string[] detail1 = new string[] { "zh-sg", keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
-                    string[] detail2 = new string[] { "zh-sg", keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
-                    string[] detail3 = new string[] { "zh-sg", keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
+                    string[] detail1 = new string[] { lengue, keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
+                    string[] detail2 = new string[] { lengue, keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
+                    string[] detail3 = new string[] { lengue, keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
                     dicGamesWithGold.AddOrUpdate(keyLinknowgame1, detail1, (oldkey, oldvalue) => detail1);
                     dicGamesWithGold.AddOrUpdate(keyLinknowgame2, detail2, (oldkey, oldvalue) => detail2);
                     dicGamesWithGold.AddOrUpdate(keyLinknowgame3, detail3, (oldkey, oldvalue) => detail3);
@@ -2886,7 +2888,9 @@ namespace XboxDownload
                             Parent = this.flpGameWithGold
                         };
                         string keyLinknowgame = item.Value[2];
-                        if (keyLinknowgame.Contains("www.microsoft.com/p/"))
+                        if (keyLinknowgame.Contains("www.xbox.com/games/"))
+                            keyLinknowgame = Regex.Replace(keyLinknowgame, @"/games/", "/" + item.Value[0] + "/games/");
+                        else if (keyLinknowgame.Contains("www.microsoft.com/p/"))
                             keyLinknowgame = Regex.Replace(keyLinknowgame, @"/p/", "/" + item.Value[0] + "/p/");
                         else if (keyLinknowgame.Contains("marketplace.xbox.com/Product/"))
                             keyLinknowgame = Regex.Replace(keyLinknowgame, @"/Product/", "/" + item.Value[0] + "/Product/");
