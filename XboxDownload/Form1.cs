@@ -2556,7 +2556,7 @@ namespace XboxDownload
                     this.cbGameBundled.SelectedIndexChanged -= new EventHandler(this.CbGameBundled_SelectedIndexChanged);
                     Market market = (Market)cbGameMarket.SelectedItem;
                     string productId = result.Groups["productId"].Value.ToUpperInvariant();
-                    url = "https://www.xbox.com/" + market.lang + "/games/store/_/" + productId;
+                    url = "https://www.microsoft.com/" + market.lang + "/p/_/" + productId;
                     linkGameWebsite.Links[0].LinkData = url;
                     ThreadPool.QueueUserWorkItem(delegate { XboxStore(market, productId); });
                 }
@@ -2791,7 +2791,7 @@ namespace XboxDownload
             if (cb.SelectedIndex <= 0) return;
             Product product = (Product)cb.SelectedItem;
             if (product.id == "0") return;
-            tbGameUrl.Text = "https://www.xbox.com/zh-tw/games/store/bugsnax/" + product.id;
+            tbGameUrl.Text = "https://www.microsoft.com/p/_/" + product.id;
             foreach (var item in cbGameMarket.Items)
             {
                 Market market = (Market)item;
@@ -2811,7 +2811,7 @@ namespace XboxDownload
             dialog.Dispose();
             if (!string.IsNullOrEmpty(dialog.productid))
             {
-                tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + dialog.productid;
+                tbGameUrl.Text = "https://www.microsoft.com/p/_/" + dialog.productid;
                 foreach (var item in cbGameMarket.Items)
                 {
                     Market market = (Market)item;
@@ -2830,7 +2830,7 @@ namespace XboxDownload
             ConcurrentDictionary<String, string[]> dicGamesWithGold = new ConcurrentDictionary<String, string[]>();
             //https://www.xbox.com/en-US/live/gold/js/globalContent.js
             SocketPackage socketPackage = ClassWeb.HttpRequest("https://www.xbox.com/en-US/live/gold/js/gwg-globalContent.js", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 60000, 60000);
-            Match result = Regex.Match(Regex.Replace(socketPackage.Html, @"globalContentOld.+", "", RegexOptions.Singleline), @"""(?<langue>[^""]+)"": \{\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame1"": ""(?<keyCopytitlenowgame1>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame1"": ""(?<keyLinknowgame1>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame1"": ""(?<keyCopydatesnowgame1>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame2"": ""(?<keyCopytitlenowgame2>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame2"": ""(?<keyLinknowgame2>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame2"": ""(?<keyCopydatesnowgame2>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame3"": ""(?<keyCopytitlenowgame3>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame3"": ""(?<keyLinknowgame3>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame3"": ""(?<keyCopydatesnowgame3>[^""]+)""");
+            Match result = Regex.Match(Regex.Replace(socketPackage.Html, @"globalContentOld.+", "", RegexOptions.Singleline), @"""(?<langue>[^""]+)"": \{\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame1"": ""(?<keyCopytitlenowgame1>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame1"": ""(?<keyLinknowgame1>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame1"": ""(?<keyCopydatesnowgame1>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame2"": ""(?<keyCopytitlenowgame2>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame2"": ""(?<keyLinknowgame2>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame2"": ""(?<keyCopydatesnowgame2>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame3"": ""(?<keyCopytitlenowgame3>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame3"": ""(?<keyLinknowgame3>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame3"": ""(?<keyCopydatesnowgame3>[^""]*)""");
             while (result.Success)
             {
                 string lengue = result.Groups["langue"].Value.ToLowerInvariant();
@@ -2845,26 +2845,35 @@ namespace XboxDownload
                 string keyCopydatesnowgame3 = result.Groups["keyCopydatesnowgame3"].Value;
                 if (lengue == "zh-tw")
                 {
-                    string[] detail1 = new string[] { lengue, keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
-                    string[] detail2 = new string[] { lengue, keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
-                    string[] detail3 = new string[] { lengue, keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
-                    dicGamesWithGold.AddOrUpdate(keyLinknowgame1, detail1, (oldkey, oldvalue) => detail1);
-                    dicGamesWithGold.AddOrUpdate(keyLinknowgame2, detail2, (oldkey, oldvalue) => detail2);
-                    dicGamesWithGold.AddOrUpdate(keyLinknowgame3, detail3, (oldkey, oldvalue) => detail3);
+                    if (!string.IsNullOrEmpty(keyLinknowgame1))
+                    {
+                        string[] detail1 = new string[] { lengue, keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
+                        dicGamesWithGold.AddOrUpdate(keyLinknowgame1, detail1, (oldkey, oldvalue) => detail1);
+                    }
+                    if (!string.IsNullOrEmpty(keyLinknowgame2))
+                    {
+                        string[] detail2 = new string[] { lengue, keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
+                        dicGamesWithGold.AddOrUpdate(keyLinknowgame2, detail2, (oldkey, oldvalue) => detail2);
+                    }
+                    if (!string.IsNullOrEmpty(keyLinknowgame3))
+                    {
+                        string[] detail3 = new string[] { lengue, keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
+                        dicGamesWithGold.AddOrUpdate(keyLinknowgame3, detail3, (oldkey, oldvalue) => detail3);
+                    }
                 }
                 else
                 {
-                    if (!dicGamesWithGold.ContainsKey(keyLinknowgame1))
+                    if (!string.IsNullOrEmpty(keyLinknowgame1) && !dicGamesWithGold.ContainsKey(keyLinknowgame1))
                     {
                         string[] detail1 = new string[] { lengue, keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
                         dicGamesWithGold.TryAdd(keyLinknowgame1, detail1);
                     }
-                    if (!dicGamesWithGold.ContainsKey(keyLinknowgame2))
+                    if (!string.IsNullOrEmpty(keyLinknowgame2) && !dicGamesWithGold.ContainsKey(keyLinknowgame2))
                     {
                         string[] detail2 = new string[] { lengue, keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
                         dicGamesWithGold.TryAdd(keyLinknowgame2, detail2);
                     }
-                    if (!dicGamesWithGold.ContainsKey(keyLinknowgame3))
+                    if (!string.IsNullOrEmpty(keyLinknowgame3) && !dicGamesWithGold.ContainsKey(keyLinknowgame3))
                     {
                         string[] detail3 = new string[] { lengue, keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
                         dicGamesWithGold.TryAdd(keyLinknowgame3, detail3);
