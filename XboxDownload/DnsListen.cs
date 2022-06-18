@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace XboxDownload
@@ -88,7 +91,7 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string ip = ClassWeb.HostToIP("assets1.xboxlive.cn", Properties.Settings.Default.DnsIP);
+                    string ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("assets1.xboxlive.cn") : ClassDNS.HostToIP("assets1.xboxlive.cn", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbCnIP, ip);
@@ -105,7 +108,7 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string ip = ClassWeb.HostToIP("tlu.dl.delivery.mp.microsoft.com", Properties.Settings.Default.DnsIP);
+                    string ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("tlu.dl.delivery.mp.microsoft.com") : ClassDNS.HostToIP("tlu.dl.delivery.mp.microsoft.com", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbAppIP, ip);
@@ -122,7 +125,7 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string ip = ClassWeb.HostToIP("gst.prod.dl.playstation.net", Properties.Settings.Default.DnsIP);
+                    string ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("gst.prod.dl.playstation.net") : ClassDNS.HostToIP("gst.prod.dl.playstation.net", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbPSIP, ip);
@@ -139,7 +142,7 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string ip = ClassWeb.HostToIP("origin-a.akamaihd.net", Properties.Settings.Default.DnsIP);
+                    string ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("origin-a.akamaihd.net") : ClassDNS.HostToIP("origin-a.akamaihd.net", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbEAIP, ip);
@@ -156,7 +159,7 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string ip = ClassWeb.HostToIP("blzddist1-a.akamaihd.net", Properties.Settings.Default.DnsIP);
+                    string ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("blzddist1-a.akamaihd.net") : ClassDNS.HostToIP("blzddist1-a.akamaihd.net", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbBattleIP, ip);
@@ -173,7 +176,7 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string ip = ClassWeb.HostToIP("epicgames-download1-1251447533.file.myqcloud.com", Properties.Settings.Default.DnsIP);
+                    string ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("epicgames-download1-1251447533.file.myqcloud.com") : ClassDNS.HostToIP("epicgames-download1-1251447533.file.myqcloud.com", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbEpicIP, ip);
@@ -243,51 +246,84 @@ namespace XboxDownload
                                     byteIP = epicIP;
                                     argb = 0x008000;
                                     break;
-                                case "www.msftconnecttest.com":
-                                    if (Properties.Settings.Default.MsNetwork)
-                                        byteIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
-                                    break;
-                                case "licensing.mp.microsoft.com":  // HTTP/TLS v1.2	授权
-                                    if (Properties.Settings.Default.MsNetwork)
-                                    {
-                                        string ip = ClassWeb.HostToIP("consumer-licensing-aks2aks-asia.md.mp.microsoft.com.akadns.net", Properties.Settings.Default.DnsIP);
-                                        if (!string.IsNullOrEmpty(ip))
-                                        {
-                                            byteIP = IPAddress.Parse(ip).GetAddressBytes();
-                                        }
-                                    }
-                                    break;
                                 default:
                                     if (byteIP == null && Form1.dicHost.ContainsKey(queryName))
+                                    {
                                         byteIP = Form1.dicHost[queryName];
+                                        argb = 0x0000FF;
+                                    }
                                     break;
                             }
-                            if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
-                            if (byteIP != null)
+                            if (dns.Querys[0].QueryType == QueryType.A)
                             {
-                                if (dns.Querys[0].QueryType == QueryType.A)
+                                if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
+                                if (byteIP != null)
                                 {
-                                    dns.QR = 1;
-                                    dns.RA = 1;
-                                    dns.RD = 1;
-                                    dns.ResouceRecords = new List<ResouceRecord>
+                                    if (dns.Querys[0].QueryType == QueryType.A)
                                     {
-                                        new ResouceRecord
+                                        dns.QR = 1;
+                                        dns.RA = 1;
+                                        dns.RD = 1;
+                                        dns.ResouceRecords = new List<ResouceRecord>
                                         {
-                                            Datas = byteIP,
-                                            TTL = 100,
-                                            QueryClass = 1,
-                                            QueryType = QueryType.A
-                                        }
-                                    };
-                                    socket.SendTo(dns.ToBytes(), client);
-                                    return;
+                                            new ResouceRecord
+                                            {
+                                                Datas = byteIP,
+                                                TTL = 100,
+                                                QueryClass = 1,
+                                                QueryType = QueryType.A
+                                            }
+                                        };
+                                        socket.SendTo(dns.ToBytes(), client);
+                                        return;
+                                    }
                                 }
-                                else // 屏蔽IPv6
+                                else if (Properties.Settings.Default.DoH)
                                 {
-                                    socket.SendTo(new byte[0], client);
-                                    return;
+                                    if (dns.Querys[0].QueryType == QueryType.A)
+                                    {
+                                        SocketPackage socketPackage = ClassWeb.HttpRequest("https://dns.alidns.com/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
+                                        if (Regex.IsMatch(socketPackage.Html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+                                        {
+                                            JavaScriptSerializer js = new JavaScriptSerializer();
+                                            try
+                                            {
+                                                var json = js.Deserialize<ClassDNS.Api>(socketPackage.Html);
+                                                if (json != null && json.Answer != null)
+                                                {
+                                                    if (json.Status == 0)
+                                                    {
+                                                        dns.QR = 1;
+                                                        dns.RA = 1;
+                                                        dns.RD = 1;
+                                                        dns.ResouceRecords = new List<ResouceRecord>();
+                                                        foreach (var answer in json.Answer)
+                                                        {
+                                                            if (answer.type == 1)
+                                                            {
+                                                                dns.ResouceRecords.Add(new ResouceRecord
+                                                                {
+                                                                    Datas = IPAddress.Parse(answer.data).GetAddressBytes(),
+                                                                    TTL = answer.TTL,
+                                                                    QueryClass = 1,
+                                                                    QueryType = QueryType.A
+                                                                });
+                                                            }
+                                                        }
+                                                        socket.SendTo(dns.ToBytes(), client);
+                                                        return;
+                                                    }
+                                                }
+                                            }
+                                            catch { }
+                                        }
+                                    }
                                 }
+                            }
+                            else // 屏蔽IPv6
+                            {
+                                socket.SendTo(new byte[0], client);
+                                return;
                             }
                         }
                         try
@@ -562,6 +598,98 @@ namespace XboxDownload
             mask <<= (7 - start);
 
             return (byte)(temp | mask);
+        }
+    }
+
+    public class ClassDNS
+    {
+        public static string HostToIP(string hostName = null, string dnsServer = null)
+        {
+            string ip = string.Empty;
+            if (string.IsNullOrEmpty(dnsServer))
+            {
+                try
+                {
+                    IPAddress[] ipAddresses = Array.FindAll(Dns.GetHostEntry(hostName).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
+                    if (ipAddresses.Length >= 1) ip = ipAddresses[0].ToString();
+                }
+                catch { }
+            }
+            else
+            {
+                string resultInfo = string.Empty;
+                using (Process p = new Process())
+                {
+                    p.StartInfo = new ProcessStartInfo("nslookup", hostName + " " + dnsServer)
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        RedirectStandardOutput = true
+                    };
+                    p.Start();
+                    resultInfo = p.StandardOutput.ReadToEnd();
+                    p.Close();
+                }
+                MatchCollection mc = Regex.Matches(resultInfo, @":\s*(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
+                if (mc.Count == 2)
+                    ip = mc[1].Groups["ip"].Value;
+            }
+            return ip;
+        }
+
+        public static string DoH(string hostName, string dnsServer = "dns.alidns.com") //"dns.alidns.com", "doh.pub", "doh.360.cn"
+        {
+            string ip = string.Empty;
+            SocketPackage socketPackage = ClassWeb.HttpRequest("https://" + dnsServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
+            if (Regex.IsMatch(socketPackage.Html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                try
+                {
+                    var json = js.Deserialize<ClassDNS.Api>(socketPackage.Html);
+                    if (json != null && json.Answer != null)
+                    {
+                        if (json.Status == 0)
+                        {
+                            foreach (var answer in json.Answer)
+                            {
+                                if (answer.type == 1)
+                                {
+                                    ip = answer.data;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+            return ip;
+        }
+
+        public class Api
+        {
+            public int Status { get; set; }
+            public bool TC { get; set; }
+            public bool RD { get; set; }
+            public bool RA { get; set; }
+            public bool AD { get; set; }
+            public bool CD { get; set; }
+            public class Question
+            {
+                public string name { get; set; }
+                public int type { get; set; }
+            }
+            public List<Answer> Answer { get; set; }
+        }
+
+        public class Answer
+        {
+            public string name { get; set; }
+            public int TTL { get; set; }
+            public int type { get; set; }
+            public string data { get; set; }
         }
     }
 }

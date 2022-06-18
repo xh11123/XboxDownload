@@ -350,12 +350,12 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool MsNetwork {
+        public bool DoH {
             get {
-                return ((bool)(this["MsNetwork"]));
+                return ((bool)(this["DoH"]));
             }
             set {
-                this["MsNetwork"] = value;
+                this["DoH"] = value;
             }
         }
     }

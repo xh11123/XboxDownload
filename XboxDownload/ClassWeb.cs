@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -812,41 +811,6 @@ namespace XboxDownload
                 default:
                     return buffer;
             }
-        }
-
-        public static string HostToIP(string hostName = null, string dnsServer = null)
-        {
-            string hostIP = string.Empty;
-            if (string.IsNullOrEmpty(dnsServer))
-            {
-                try
-                {
-                    IPAddress[] ipAddresses = Array.FindAll(Dns.GetHostEntry(hostName).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
-                    if (ipAddresses.Length >= 1) hostIP = ipAddresses[0].ToString();
-                }
-                catch { }
-            }
-            else
-            {
-                string resultInfo = string.Empty;
-                using (Process p = new Process())
-                {
-                    p.StartInfo = new ProcessStartInfo("nslookup", hostName + " " + dnsServer)
-                    {
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        RedirectStandardOutput = true
-                    };
-                    p.Start();
-                    resultInfo = p.StandardOutput.ReadToEnd();
-                    p.Close();
-                }
-                MatchCollection mc = Regex.Matches(resultInfo, @":\s*(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
-                if (mc.Count == 2)
-                    hostIP = mc[1].Groups["ip"].Value;
-            }
-            return hostIP;
         }
 
         internal static Object docLock = new Object();

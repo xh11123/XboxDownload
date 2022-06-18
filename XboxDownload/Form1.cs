@@ -39,6 +39,28 @@ namespace XboxDownload
         {
             InitializeComponent();
 
+            //清理历史遗留文件
+            if (Directory.Exists(Application.StartupPath + "\\Store"))
+            {
+                Directory.Delete(Application.StartupPath + "\\Store", true);
+            }
+            if (File.Exists(Application.StartupPath + "\\Domain"))
+            {
+                File.Delete(Application.StartupPath + "\\Domain");
+            }
+            if (File.Exists(Application.StartupPath + "\\IP列表(assets1.xboxlive.cn).txt"))
+            {
+                File.Delete(Application.StartupPath + "\\IP列表(assets1.xboxlive.cn).txt");
+            }
+            if (File.Exists(Application.StartupPath + "\\使用说明.docx"))
+            {
+                File.Delete(Application.StartupPath + "\\使用说明.docx");
+            }
+            if (File.Exists(Application.StartupPath + "\\IP.uplaypc-s-ubisoft.cdn.ubi.com.txt"))
+            {
+                File.Delete(Application.StartupPath + "\\IP.uplaypc-s-ubisoft.cdn.ubi.com.txt");
+            }
+
             if (!File.Exists(Application.StartupPath + "\\Interop.TaskScheduler.dll"))
                 ThreadPool.QueueUserWorkItem(delegate { UpdateFile.Download("Interop.TaskScheduler.dll"); });
             Form1.dpixRatio = Environment.OSVersion.Version.Major >= 10 ? CreateGraphics().DpiX / 96 : Program.Utility.DpiX / 96;
@@ -89,7 +111,7 @@ namespace XboxDownload
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbSteamStore.Checked = Properties.Settings.Default.SteamStore;
-            ckbMsNetwork.Checked = Properties.Settings.Default.MsNetwork;
+            ckbDoH.Checked = Properties.Settings.Default.DoH;
 
             IPAddress[] ipAddresses = Array.FindAll(Dns.GetHostEntry(string.Empty).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
             cbLocalIP.Items.AddRange(ipAddresses);
@@ -130,6 +152,8 @@ namespace XboxDownload
             }
             dgvHosts.DataSource = dtHost;
             AddHost();
+            cbDomainName.SelectedIndex = 0;
+            cbDohDNS.SelectedIndex = 0;
 
             Form1.lsMarket.AddRange((new List<Market>
             {
@@ -197,7 +221,8 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net\n\n速度不正常请点击右下角 “修复 EA app”");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
-            
+            toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(DNS over TLS) 解析域名IP，\n防止域名DNS被劫持污染。\nXbox各种联网问题可以勾选此选项。");
+
             LinkRefreshDrive_LinkClicked(null, null);
             if (bStartup)
             {
@@ -582,7 +607,7 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.SteamStore = ckbSteamStore.Checked;
-                Properties.Settings.Default.MsNetwork = ckbMsNetwork.Checked;
+                Properties.Settings.Default.DoH = ckbDoH.Checked;
                 Properties.Settings.Default.Save();
 
                 string resultInfo = string.Empty;
@@ -726,7 +751,7 @@ namespace XboxDownload
 
         private void WriteHost(bool add)
         {
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.SteamStore || Properties.Settings.Default.MsNetwork)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.SteamStore)) return;
 
             string sHostsPath = Environment.SystemDirectory + "\\drivers\\etc\\hosts";
             try
@@ -832,13 +857,6 @@ namespace XboxDownload
                         sb.AppendLine(Properties.Settings.Default.LocalIP + " store.steampowered.com");
                         sb.AppendLine(Properties.Settings.Default.LocalIP + " steamcommunity.com");
                         sb.AppendLine("0.0.0.0 fonts.googleapis.com");
-                    }
-                    if (Properties.Settings.Default.MsNetwork)
-                    {
-                        sb.AppendLine(Properties.Settings.Default.LocalIP + " www.msftconnecttest.com");
-                        string ip = ClassWeb.HostToIP("consumer-licensing-aks2aks-asia.md.mp.microsoft.com.akadns.net", Properties.Settings.Default.DnsIP);
-                        if (!string.IsNullOrEmpty(ip))
-                            sb.AppendLine(ip + " licensing.mp.microsoft.com");
                     }
                     foreach (var host in dicHost)
                     {
@@ -1715,7 +1733,7 @@ namespace XboxDownload
                     {
                         LinkLabel lb1 = new LinkLabel()
                         {
-                            Tag = "http://assets1.xboxlive.com/14/3ca4e93f-dd4e-4d6b-a8bf-1c8da4c7b196/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3414.47446.0.feb57805-31af-48a6-a35c-d66d4941c611/Microsoft.254428597CFE2_1.3414.47446.0_neutral__8wekyb3d8bbwe_xs.xvc",
+                            Tag = "http://assets1.xboxlive.com/6/3cd1df82-6c9b-4ee2-923c-c62efb01cfaa/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3472.45456.0.78ccfdb5-8bda-4d9d-92cc-20dbbfc2771f/Microsoft.254428597CFE2_1.3472.45456.0_neutral__8wekyb3d8bbwe_xs.xvc",
                             Text = "光环:无限",
                             AutoSize = true,
                             Parent = this.flpTestUrl
@@ -1748,7 +1766,7 @@ namespace XboxDownload
                     {
                         LinkLabel lb1 = new LinkLabel()
                         {
-                            Tag = "http://assets1.xboxlive.cn/14/3ca4e93f-dd4e-4d6b-a8bf-1c8da4c7b196/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3414.47446.0.feb57805-31af-48a6-a35c-d66d4941c611/Microsoft.254428597CFE2_1.3414.47446.0_neutral__8wekyb3d8bbwe_xs.xvc",
+                            Tag = "http://assets1.xboxlive.cn/6/3cd1df82-6c9b-4ee2-923c-c62efb01cfaa/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3472.45456.0.78ccfdb5-8bda-4d9d-92cc-20dbbfc2771f/Microsoft.254428597CFE2_1.3472.45456.0_neutral__8wekyb3d8bbwe_xs.xvc",
                             Text = "光环:无限",
                             AutoSize = true,
                             Parent = this.flpTestUrl
@@ -2171,26 +2189,84 @@ namespace XboxDownload
             }
         }
 
-        private void LinkXbox360HostName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void CbDomainName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string[] hostNames = new string[] { "download.xbox.com", "download.xbox.com.edgesuite.net", "xbox-ecn102.vo.msecnd.net" };
-            foreach (string hostName in hostNames)
+            if (cbDomainName.SelectedIndex <= 0) return;
+            Match result = Regex.Match(cbDomainName.Text, @"(?<remark>[^\(]+)(\((?<hostname>.+)\))?");
+            if (result.Success)
             {
-                DataRow[] rows = dtHost.Select("HostName='" + hostName + "'");
-                if (rows.Length >= 1)
+                string remark = result.Groups["remark"].Value;
+                if (remark == "Xbox360主机本地上传")
                 {
-                    rows[0]["Enable"] = true;
-                    rows[0]["IPv4"] = Properties.Settings.Default.LocalIP;
-                    rows[0]["Remark"] = "Xbox360主机下载域名";
+                    string[] hostNames = new string[] { "download.xbox.com", "download.xbox.com.edgesuite.net", "xbox-ecn102.vo.msecnd.net" };
+                    foreach (string hostName in hostNames)
+                    {
+                        DataRow[] rows = dtHost.Select("HostName='" + hostName + "'");
+                        if (rows.Length >= 1)
+                        {
+                            rows[0]["Enable"] = true;
+                            rows[0]["IPv4"] = Properties.Settings.Default.LocalIP;
+                            rows[0]["Remark"] = "Xbox360主机下载域名";
+                        }
+                        else
+                        {
+                            DataRow dr = dtHost.NewRow();
+                            dr["Enable"] = true;
+                            dr["HostName"] = hostName;
+                            dr["IPv4"] = Properties.Settings.Default.LocalIP;
+                            dr["Remark"] = "Xbox360主机下载域名";
+                            dtHost.Rows.Add(dr);
+                        }
+                    }
                 }
                 else
                 {
-                    DataRow dr = dtHost.NewRow();
-                    dr["Enable"] = true;
-                    dr["HostName"] = hostName;
-                    dr["IPv4"] = Properties.Settings.Default.LocalIP;
-                    dr["Remark"] = "Xbox360主机下载域名";
-                    dtHost.Rows.Add(dr);
+                    string dnsServer;
+                    switch (cbDohDNS.SelectedIndex)
+                    {
+                        case 1:
+                            dnsServer = "doh.pub";
+                            break;
+                        case 2:
+                            dnsServer = "doh.360.cn";
+                            break;
+                        case 3:
+                            dnsServer = "8.8.8.8";
+                            break;
+                        default:
+                            dnsServer = "dns.alidns.com";
+                            break;
+                    }
+                    string hostname = result.Groups["hostname"].Value.ToLower();
+                    DataRow[] rows = dtHost.Select("HostName='" + hostname + "'");
+                    DataRow dr;
+                    if (rows.Length >= 1)
+                    {
+                        dr = rows[0];
+                    }
+                    else
+                    {
+                        dr = dtHost.NewRow();
+                        dr["Enable"] = true;
+                        dr["HostName"] = hostname;
+                        dtHost.Rows.Add(dr);
+                    }
+                    dr["IPv4"] = null;
+                    Task.Run(() =>
+                    {
+                        dr["IPv4"] = ClassDNS.DoH(hostname, dnsServer);
+                    });
+                    dr["Remark"] = remark;
+                    dgvHosts.ClearSelection();
+                    foreach (DataGridViewRow dgvr in dgvHosts.Rows)
+                    {
+                        if (dgvr.IsNewRow) break;
+                        if (dgvr.Cells["Col_HostName"].Value.ToString() == hostname)
+                        {
+                            dgvr.Cells["Col_IPv4"].Selected = true;
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -2210,6 +2286,7 @@ namespace XboxDownload
         private void ButHostReset_Click(object sender, EventArgs e)
         {
             dtHost.RejectChanges();
+            dgvHosts.ClearSelection();
         }
 
         private void LinkHostClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2235,6 +2312,7 @@ namespace XboxDownload
                     }
                 }
             }
+            dgvHosts.ClearSelection();
         }
         #endregion
 

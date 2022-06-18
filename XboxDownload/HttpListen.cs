@@ -218,7 +218,7 @@ namespace XboxDownload
                             string _url = "http://" + _hosts + _filePath;
                             if (_hosts == "dl.delivery.mp.microsoft.com" || _extension == ".phf" || _extension == ".json") //代理 Xbox|PS 下载索引
                             {
-                                string ip = ClassWeb.HostToIP(_hosts, "114.114.114.114");
+                                string ip = ClassDNS.DoH(_hosts);
                                 if (!string.IsNullOrEmpty(ip))
                                 {
                                     SocketPackage socketPackage = ClassWeb.HttpRequest(_url, "GET", null, null, true, false, false, null, null, null, null, null, null, null, null, 0, null, 30000, 30000, 1, ip);
@@ -255,7 +255,7 @@ namespace XboxDownload
                             }
                             else if (Properties.Settings.Default.LocalUpload && _hosts == "tlu.dl.delivery.mp.microsoft.com" && !dicAppLocalUploadFile.ContainsKey(_filePath)) //识别本地上传应用文件名
                             {
-                                string ip = ClassWeb.HostToIP(_hosts, "114.114.114.114");
+                                string ip = ClassDNS.DoH(_hosts);
                                 if (!string.IsNullOrEmpty(ip))
                                 {
                                     SocketPackage socketPackage = ClassWeb.HttpRequest(_url, "GET", null, null, true, false, false, null, null, new string[] { "Range: bytes=0-0" }, null, null, null, null, null, 0, null, 30000, 30000, 1, ip);
@@ -266,19 +266,6 @@ namespace XboxDownload
                                         dicAppLocalUploadFile.AddOrUpdate(_filePath, filename, (oldkey, oldvalue) => filename);
                                     }
                                 }
-                            }
-                            else if (_hosts == "www.msftconnecttest.com" && _tmpPath.ToLower() == "/connecttest.txt") // 网络连接 (NCSI)，修复 Xbox、Windows 系统网络正常却显示离线
-                            {
-                                bFileNotFound = false;
-                                if (Form1.bRecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString());
-                                Byte[] _response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
-                                StringBuilder sb = new StringBuilder();
-                                sb.Append("HTTP/1.1 200 OK\r\n");
-                                sb.Append("Content-Type: text/html\r\n");
-                                sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
                             }
                             if (bFileNotFound)
                             {

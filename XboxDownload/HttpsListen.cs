@@ -165,13 +165,7 @@ namespace XboxDownload
                                         case "api1.origin.com":
                                             if (Properties.Settings.Default.EAStore)
                                             {
-                                                if (string.IsNullOrEmpty(ipApiOrigin))
-                                                {
-                                                    string[] dns = new string[] { "8.8.8.8", "114.114.114.114", "180.76.76.76", "223.5.5.5", "208.67.220.220" }; //Google, 114, 百度，阿里，OpenDns
-                                                    Random rand = new Random();
-                                                    int index = rand.Next(0, dns.Length);
-                                                    ipApiOrigin = ClassWeb.HostToIP(_hosts, dns[index]);
-                                                }
+                                                ipApiOrigin = ipApiOrigin ?? ClassDNS.DoH(_hosts);
                                                 if (!string.IsNullOrEmpty(ipApiOrigin))
                                                 {
                                                     bool decode = false;
