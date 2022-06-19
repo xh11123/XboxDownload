@@ -15,6 +15,7 @@ namespace XboxDownload
     class DnsListen
     {
         private readonly Form1 parentForm;
+        private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://dns.alidns.com" : "http://dns.alidns.com";
         Socket socket = null;
 
         public DnsListen(Form1 parentForm)
@@ -196,66 +197,66 @@ namespace XboxDownload
                         var dns = new DNS(buff, read);
                         if (dns.QR == 0 && dns.Opcode == 0 && dns.Querys.Count == 1 && (dns.Querys[0].QueryType == QueryType.A || dns.Querys[0].QueryType == QueryType.AAAA))
                         {
-                            string queryName = dns.Querys[0].QueryName.ToLower();
-                            Byte[] byteIP = null;
-                            int argb = 0;
-                            switch (queryName)
-                            {
-                                case "assets1.xboxlive.com":
-                                case "assets2.xboxlive.com":
-                                case "dlassets.xboxlive.com":
-                                case "dlassets2.xboxlive.com":
-                                case "d1.xboxlive.com":
-                                case "d2.xboxlive.com":
-                                case "xvcf1.xboxlive.com":
-                                case "xvcf2.xboxlive.com":
-                                    byteIP = comIP;
-                                    argb = 0x008000;
-                                    break;
-                                case "assets1.xboxlive.cn":
-                                case "assets2.xboxlive.cn":
-                                case "dlassets.xboxlive.cn":
-                                case "dlassets2.xboxlive.cn":
-                                case "d1.xboxlive.cn":
-                                case "d2.xboxlive.cn":
-                                    byteIP = cnIP;
-                                    argb = 0x008000;
-                                    break;
-                                case "dl.delivery.mp.microsoft.com":
-                                case "tlu.dl.delivery.mp.microsoft.com":
-                                    byteIP = appIP;
-                                    argb = 0x008000;
-                                    break;
-                                case "gs2.ww.prod.dl.playstation.net":
-                                case "gst.prod.dl.playstation.net":
-                                case "zeus.dl.playstation.net":
-                                    byteIP = psIP;
-                                    argb = 0x008000;
-                                    break;
-                                case "origin-a.akamaihd.net":
-                                    byteIP = eaIP;
-                                    argb = 0x008000;
-                                    break;
-                                case "blzddist1-a.akamaihd.net":
-                                case "blzddist2-a.akamaihd.net":
-                                case "blzddist3-a.akamaihd.net":
-                                    byteIP = battleIP;
-                                    argb = 0x008000;
-                                    break;
-                                case "epicgames-download1-1251447533.file.myqcloud.com":
-                                    byteIP = epicIP;
-                                    argb = 0x008000;
-                                    break;
-                                default:
-                                    if (byteIP == null && Form1.dicHost.ContainsKey(queryName))
-                                    {
-                                        byteIP = Form1.dicHost[queryName];
-                                        argb = 0x0000FF;
-                                    }
-                                    break;
-                            }
                             if (dns.Querys[0].QueryType == QueryType.A)
                             {
+                                string queryName = dns.Querys[0].QueryName.ToLower();
+                                Byte[] byteIP = null;
+                                int argb = 0;
+                                switch (queryName)
+                                {
+                                    case "assets1.xboxlive.com":
+                                    case "assets2.xboxlive.com":
+                                    case "dlassets.xboxlive.com":
+                                    case "dlassets2.xboxlive.com":
+                                    case "d1.xboxlive.com":
+                                    case "d2.xboxlive.com":
+                                    case "xvcf1.xboxlive.com":
+                                    case "xvcf2.xboxlive.com":
+                                        byteIP = comIP;
+                                        argb = 0x008000;
+                                        break;
+                                    case "assets1.xboxlive.cn":
+                                    case "assets2.xboxlive.cn":
+                                    case "dlassets.xboxlive.cn":
+                                    case "dlassets2.xboxlive.cn":
+                                    case "d1.xboxlive.cn":
+                                    case "d2.xboxlive.cn":
+                                        byteIP = cnIP;
+                                        argb = 0x008000;
+                                        break;
+                                    case "dl.delivery.mp.microsoft.com":
+                                    case "tlu.dl.delivery.mp.microsoft.com":
+                                        byteIP = appIP;
+                                        argb = 0x008000;
+                                        break;
+                                    case "gs2.ww.prod.dl.playstation.net":
+                                    case "gst.prod.dl.playstation.net":
+                                    case "zeus.dl.playstation.net":
+                                        byteIP = psIP;
+                                        argb = 0x008000;
+                                        break;
+                                    case "origin-a.akamaihd.net":
+                                        byteIP = eaIP;
+                                        argb = 0x008000;
+                                        break;
+                                    case "blzddist1-a.akamaihd.net":
+                                    case "blzddist2-a.akamaihd.net":
+                                    case "blzddist3-a.akamaihd.net":
+                                        byteIP = battleIP;
+                                        argb = 0x008000;
+                                        break;
+                                    case "epicgames-download1-1251447533.file.myqcloud.com":
+                                        byteIP = epicIP;
+                                        argb = 0x008000;
+                                        break;
+                                    default:
+                                        if (Form1.dicHost.ContainsKey(queryName))
+                                        {
+                                            byteIP = Form1.dicHost[queryName];
+                                            argb = 0x0000FF;
+                                        }
+                                        break;
+                                }
                                 if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
                                 if (byteIP != null)
                                 {
@@ -282,7 +283,8 @@ namespace XboxDownload
                                 {
                                     if (dns.Querys[0].QueryType == QueryType.A)
                                     {
-                                        SocketPackage socketPackage = ClassWeb.HttpRequest("https://dns.alidns.com/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
+
+                                        SocketPackage socketPackage = ClassWeb.HttpRequest(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
                                         if (Regex.IsMatch(socketPackage.Html.Trim(), @"^{.+}$", RegexOptions.Singleline))
                                         {
                                             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -638,10 +640,14 @@ namespace XboxDownload
             return ip;
         }
 
-        public static string DoH(string hostName, string dnsServer = "dns.alidns.com") //"dns.alidns.com", "doh.pub", "doh.360.cn"
+        public static string DoH(string hostName, string dohServer = "dns.alidns.com") //"dns.alidns.com", "doh.pub", "doh.360.cn"
         {
             string ip = string.Empty;
-            SocketPackage socketPackage = ClassWeb.HttpRequest("https://" + dnsServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
+            if (Environment.OSVersion.Version.Major < 10 && dohServer == "dns.alidns.com")
+                dohServer = "http://" + dohServer;
+            else
+                dohServer = "https://" + dohServer;
+            SocketPackage socketPackage = ClassWeb.HttpRequest(dohServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
             if (Regex.IsMatch(socketPackage.Html.Trim(), @"^{.+}$", RegexOptions.Singleline))
             {
                 JavaScriptSerializer js = new JavaScriptSerializer();

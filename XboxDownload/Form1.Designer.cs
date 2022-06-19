@@ -31,10 +31,10 @@ namespace XboxDownload
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmUpdate = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +66,7 @@ namespace XboxDownload
             this.cbLocalIP = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckbDoH = new System.Windows.Forms.CheckBox();
             this.ckbSteamStore = new System.Windows.Forms.CheckBox();
             this.ckbEpicCDN = new System.Windows.Forms.CheckBox();
             this.ckbEpicStore = new System.Windows.Forms.CheckBox();
@@ -152,6 +153,7 @@ namespace XboxDownload
             this.Col_IPv4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Remark = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.cbDohDNS = new System.Windows.Forms.ComboBox();
             this.cbDomainName = new System.Windows.Forms.ComboBox();
             this.linkHostClear = new System.Windows.Forms.LinkLabel();
             this.butHostReset = new System.Windows.Forms.Button();
@@ -282,8 +284,6 @@ namespace XboxDownload
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmCopyUrl1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmCopyUrl2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbDohDNS = new System.Windows.Forms.ComboBox();
-            this.ckbDoH = new System.Windows.Forms.CheckBox();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabService.SuspendLayout();
@@ -684,6 +684,18 @@ namespace XboxDownload
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "设置";
+            // 
+            // ckbDoH
+            // 
+            this.ckbDoH.AutoSize = true;
+            this.ckbDoH.ForeColor = System.Drawing.Color.Red;
+            this.ckbDoH.Location = new System.Drawing.Point(1241, 252);
+            this.ckbDoH.Name = "ckbDoH";
+            this.ckbDoH.Size = new System.Drawing.Size(187, 22);
+            this.ckbDoH.TabIndex = 126;
+            this.ckbDoH.Tag = "";
+            this.ckbDoH.Text = "使用 DoH 解析域名";
+            this.ckbDoH.UseVisualStyleBackColor = true;
             // 
             // ckbSteamStore
             // 
@@ -1176,9 +1188,9 @@ namespace XboxDownload
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle17.Format = "N0";
-            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle37.Format = "N0";
+            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle37;
             this.Col_TTL.HeaderText = "TTL";
             this.Col_TTL.MinimumWidth = 8;
             this.Col_TTL.Name = "Col_TTL";
@@ -1186,9 +1198,9 @@ namespace XboxDownload
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle18.Format = "N0";
-            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle38.Format = "N0";
+            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle38;
             this.Col_RoundtripTime.HeaderText = "响应时间(ms)";
             this.Col_RoundtripTime.MinimumWidth = 8;
             this.Col_RoundtripTime.Name = "Col_RoundtripTime";
@@ -1196,9 +1208,9 @@ namespace XboxDownload
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle19.Format = "N2";
-            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle39.Format = "N2";
+            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle39;
             this.Col_Speed.HeaderText = "下载速度(MB/s)";
             this.Col_Speed.MinimumWidth = 8;
             this.Col_Speed.Name = "Col_Speed";
@@ -1569,20 +1581,36 @@ namespace XboxDownload
             this.panel3.Size = new System.Drawing.Size(1464, 51);
             this.panel3.TabIndex = 2;
             // 
+            // cbDohDNS
+            // 
+            this.cbDohDNS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDohDNS.FormattingEnabled = true;
+            this.cbDohDNS.Items.AddRange(new object[] {
+            "阿里云DoH",
+            "腾讯云DoH",
+            "360 DoH",
+            "谷歌DoH(科学)"});
+            this.cbDohDNS.Location = new System.Drawing.Point(456, 13);
+            this.cbDohDNS.Name = "cbDohDNS";
+            this.cbDohDNS.Size = new System.Drawing.Size(148, 26);
+            this.cbDohDNS.TabIndex = 8;
+            this.cbDohDNS.SelectedIndexChanged += new System.EventHandler(this.CbDomainName_SelectedIndexChanged);
+            // 
             // cbDomainName
             // 
             this.cbDomainName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDomainName.FormattingEnabled = true;
             this.cbDomainName.Items.AddRange(new object[] {
             "选择微软服务",
-            "微软认证服务(licensing.mp.microsoft.com)",
+            "联机激活和应用许可(licensing.mp.microsoft.com)",
+            "微软商店通信(displaycatalog.mp.microsoft.com)",
+            "微软商店图像(store-images.s-microsoft.com)",
             "XGP游戏库(catalog.gamepass.com)",
-            "Xbox商店图片(store-images.s-microsoft.com)",
             "Xbox云存档(titlestorage.xboxlive.com)",
             "Xbox360主机本地上传"});
             this.cbDomainName.Location = new System.Drawing.Point(5, 13);
             this.cbDomainName.Name = "cbDomainName";
-            this.cbDomainName.Size = new System.Drawing.Size(420, 26);
+            this.cbDomainName.Size = new System.Drawing.Size(445, 26);
             this.cbDomainName.TabIndex = 7;
             this.cbDomainName.SelectedIndexChanged += new System.EventHandler(this.CbDomainName_SelectedIndexChanged);
             // 
@@ -1601,7 +1629,7 @@ namespace XboxDownload
             // butHostReset
             // 
             this.butHostReset.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.butHostReset.Location = new System.Drawing.Point(742, 8);
+            this.butHostReset.Location = new System.Drawing.Point(741, 8);
             this.butHostReset.Name = "butHostReset";
             this.butHostReset.Size = new System.Drawing.Size(112, 34);
             this.butHostReset.TabIndex = 5;
@@ -1612,7 +1640,7 @@ namespace XboxDownload
             // butHostSave
             // 
             this.butHostSave.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.butHostSave.Location = new System.Drawing.Point(604, 8);
+            this.butHostSave.Location = new System.Drawing.Point(612, 8);
             this.butHostSave.Margin = new System.Windows.Forms.Padding(4);
             this.butHostSave.Name = "butHostSave";
             this.butHostSave.Size = new System.Drawing.Size(112, 34);
@@ -1925,8 +1953,8 @@ namespace XboxDownload
             // 
             // Col_Size
             // 
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Col_Size.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Col_Size.DefaultCellStyle = dataGridViewCellStyle40;
             this.Col_Size.HeaderText = "容量";
             this.Col_Size.MinimumWidth = 8;
             this.Col_Size.Name = "Col_Size";
@@ -2908,33 +2936,6 @@ namespace XboxDownload
             this.tsmCopyUrl2.Size = new System.Drawing.Size(247, 30);
             this.tsmCopyUrl2.Text = "复制(.com替换为.cn)";
             this.tsmCopyUrl2.Click += new System.EventHandler(this.TsmCopyUrl2_Click);
-            // 
-            // cbDohDNS
-            // 
-            this.cbDohDNS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDohDNS.FormattingEnabled = true;
-            this.cbDohDNS.Items.AddRange(new object[] {
-            "阿里云 DoH",
-            "腾讯云 DoH",
-            "360 DoH",
-            "谷歌 DoH(科学)"});
-            this.cbDohDNS.Location = new System.Drawing.Point(431, 13);
-            this.cbDohDNS.Name = "cbDohDNS";
-            this.cbDohDNS.Size = new System.Drawing.Size(160, 26);
-            this.cbDohDNS.TabIndex = 8;
-            this.cbDohDNS.SelectedIndexChanged += new System.EventHandler(this.CbDomainName_SelectedIndexChanged);
-            // 
-            // ckbDoH
-            // 
-            this.ckbDoH.AutoSize = true;
-            this.ckbDoH.ForeColor = System.Drawing.Color.Red;
-            this.ckbDoH.Location = new System.Drawing.Point(1241, 252);
-            this.ckbDoH.Name = "ckbDoH";
-            this.ckbDoH.Size = new System.Drawing.Size(187, 22);
-            this.ckbDoH.TabIndex = 126;
-            this.ckbDoH.Tag = "";
-            this.ckbDoH.Text = "使用 DoH 解析域名";
-            this.ckbDoH.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
