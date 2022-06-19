@@ -31,10 +31,10 @@ namespace XboxDownload
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmUpdate = new System.Windows.Forms.ToolStripMenuItem();
@@ -689,10 +689,10 @@ namespace XboxDownload
             // 
             this.ckbDoH.AutoSize = true;
             this.ckbDoH.ForeColor = System.Drawing.Color.Red;
-            this.ckbDoH.Location = new System.Drawing.Point(1241, 252);
+            this.ckbDoH.Location = new System.Drawing.Point(1240, 111);
             this.ckbDoH.Name = "ckbDoH";
             this.ckbDoH.Size = new System.Drawing.Size(187, 22);
-            this.ckbDoH.TabIndex = 126;
+            this.ckbDoH.TabIndex = 24;
             this.ckbDoH.Tag = "";
             this.ckbDoH.Text = "使用 DoH 解析域名";
             this.ckbDoH.UseVisualStyleBackColor = true;
@@ -700,10 +700,10 @@ namespace XboxDownload
             // ckbSteamStore
             // 
             this.ckbSteamStore.AutoSize = true;
-            this.ckbSteamStore.Location = new System.Drawing.Point(1240, 224);
+            this.ckbSteamStore.Location = new System.Drawing.Point(1240, 251);
             this.ckbSteamStore.Name = "ckbSteamStore";
             this.ckbSteamStore.Size = new System.Drawing.Size(169, 22);
-            this.ckbSteamStore.TabIndex = 28;
+            this.ckbSteamStore.TabIndex = 29;
             this.ckbSteamStore.Text = "修复 Steam 商店";
             this.ckbSteamStore.UseVisualStyleBackColor = true;
             // 
@@ -720,10 +720,10 @@ namespace XboxDownload
             // ckbEpicStore
             // 
             this.ckbEpicStore.AutoSize = true;
-            this.ckbEpicStore.Location = new System.Drawing.Point(1240, 196);
+            this.ckbEpicStore.Location = new System.Drawing.Point(1240, 223);
             this.ckbEpicStore.Name = "ckbEpicStore";
             this.ckbEpicStore.Size = new System.Drawing.Size(160, 22);
-            this.ckbEpicStore.TabIndex = 27;
+            this.ckbEpicStore.TabIndex = 28;
             this.ckbEpicStore.Text = "加速 Epic (PC)";
             this.ckbEpicStore.UseVisualStyleBackColor = true;
             // 
@@ -755,10 +755,10 @@ namespace XboxDownload
             // ckbBattleStore
             // 
             this.ckbBattleStore.AutoSize = true;
-            this.ckbBattleStore.Location = new System.Drawing.Point(1240, 168);
+            this.ckbBattleStore.Location = new System.Drawing.Point(1240, 195);
             this.ckbBattleStore.Name = "ckbBattleStore";
             this.ckbBattleStore.Size = new System.Drawing.Size(196, 22);
-            this.ckbBattleStore.TabIndex = 26;
+            this.ckbBattleStore.TabIndex = 27;
             this.ckbBattleStore.Text = "加速战网国际服(PC)";
             this.ckbBattleStore.UseVisualStyleBackColor = true;
             // 
@@ -845,10 +845,10 @@ namespace XboxDownload
             // ckbEAStore
             // 
             this.ckbEAStore.AutoSize = true;
-            this.ckbEAStore.Location = new System.Drawing.Point(1240, 140);
+            this.ckbEAStore.Location = new System.Drawing.Point(1240, 167);
             this.ckbEAStore.Name = "ckbEAStore";
             this.ckbEAStore.Size = new System.Drawing.Size(142, 22);
-            this.ckbEAStore.TabIndex = 25;
+            this.ckbEAStore.TabIndex = 26;
             this.ckbEAStore.Text = "加速 EA (PC)";
             this.ckbEAStore.UseVisualStyleBackColor = true;
             // 
@@ -880,10 +880,10 @@ namespace XboxDownload
             // ckbMicrosoftStore
             // 
             this.ckbMicrosoftStore.AutoSize = true;
-            this.ckbMicrosoftStore.Location = new System.Drawing.Point(1240, 112);
+            this.ckbMicrosoftStore.Location = new System.Drawing.Point(1240, 139);
             this.ckbMicrosoftStore.Name = "ckbMicrosoftStore";
             this.ckbMicrosoftStore.Size = new System.Drawing.Size(178, 22);
-            this.ckbMicrosoftStore.TabIndex = 24;
+            this.ckbMicrosoftStore.TabIndex = 25;
             this.ckbMicrosoftStore.Text = "加速微软商店(PC)";
             this.ckbMicrosoftStore.UseVisualStyleBackColor = true;
             // 
@@ -1188,9 +1188,9 @@ namespace XboxDownload
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle37.Format = "N0";
-            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle37;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             this.Col_TTL.HeaderText = "TTL";
             this.Col_TTL.MinimumWidth = 8;
             this.Col_TTL.Name = "Col_TTL";
@@ -1198,9 +1198,9 @@ namespace XboxDownload
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle38.Format = "N0";
-            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle38;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             this.Col_RoundtripTime.HeaderText = "响应时间(ms)";
             this.Col_RoundtripTime.MinimumWidth = 8;
             this.Col_RoundtripTime.Name = "Col_RoundtripTime";
@@ -1208,9 +1208,9 @@ namespace XboxDownload
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle39.Format = "N2";
-            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle39;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             this.Col_Speed.HeaderText = "下载速度(MB/s)";
             this.Col_Speed.MinimumWidth = 8;
             this.Col_Speed.Name = "Col_Speed";
@@ -1953,8 +1953,8 @@ namespace XboxDownload
             // 
             // Col_Size
             // 
-            dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Col_Size.DefaultCellStyle = dataGridViewCellStyle40;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Col_Size.DefaultCellStyle = dataGridViewCellStyle4;
             this.Col_Size.HeaderText = "容量";
             this.Col_Size.MinimumWidth = 8;
             this.Col_Size.Name = "Col_Size";

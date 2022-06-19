@@ -208,7 +208,6 @@ namespace XboxDownload
                                                         ssl.Write(socketPackage.Buffer);
                                                         ssl.Flush();
                                                     }
-                                                    else ipApiOrigin = null;
                                                 }
                                             }
                                             break;

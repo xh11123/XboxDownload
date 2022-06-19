@@ -260,65 +260,58 @@ namespace XboxDownload
                                 if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
                                 if (byteIP != null)
                                 {
-                                    if (dns.Querys[0].QueryType == QueryType.A)
+                                    dns.QR = 1;
+                                    dns.RA = 1;
+                                    dns.RD = 1;
+                                    dns.ResouceRecords = new List<ResouceRecord>
                                     {
-                                        dns.QR = 1;
-                                        dns.RA = 1;
-                                        dns.RD = 1;
-                                        dns.ResouceRecords = new List<ResouceRecord>
+                                        new ResouceRecord
                                         {
-                                            new ResouceRecord
-                                            {
-                                                Datas = byteIP,
-                                                TTL = 100,
-                                                QueryClass = 1,
-                                                QueryType = QueryType.A
-                                            }
-                                        };
-                                        socket.SendTo(dns.ToBytes(), client);
-                                        return;
-                                    }
+                                            Datas = byteIP,
+                                            TTL = 100,
+                                            QueryClass = 1,
+                                            QueryType = QueryType.A
+                                        }
+                                    };
+                                    socket.SendTo(dns.ToBytes(), client);
+                                    return;
                                 }
                                 else if (Properties.Settings.Default.DoH)
                                 {
-                                    if (dns.Querys[0].QueryType == QueryType.A)
+                                    SocketPackage socketPackage = ClassWeb.HttpRequest(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
+                                    if (Regex.IsMatch(socketPackage.Html.Trim(), @"^{.+}$", RegexOptions.Singleline))
                                     {
-
-                                        SocketPackage socketPackage = ClassWeb.HttpRequest(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, true, false, true, null, null, null, ClassWeb.useragent, null, null, null, null, 0, null, 6000, 6000);
-                                        if (Regex.IsMatch(socketPackage.Html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+                                        JavaScriptSerializer js = new JavaScriptSerializer();
+                                        try
                                         {
-                                            JavaScriptSerializer js = new JavaScriptSerializer();
-                                            try
+                                            var json = js.Deserialize<ClassDNS.Api>(socketPackage.Html);
+                                            if (json != null && json.Answer != null)
                                             {
-                                                var json = js.Deserialize<ClassDNS.Api>(socketPackage.Html);
-                                                if (json != null && json.Answer != null)
+                                                if (json.Status == 0)
                                                 {
-                                                    if (json.Status == 0)
+                                                    dns.QR = 1;
+                                                    dns.RA = 1;
+                                                    dns.RD = 1;
+                                                    dns.ResouceRecords = new List<ResouceRecord>();
+                                                    foreach (var answer in json.Answer)
                                                     {
-                                                        dns.QR = 1;
-                                                        dns.RA = 1;
-                                                        dns.RD = 1;
-                                                        dns.ResouceRecords = new List<ResouceRecord>();
-                                                        foreach (var answer in json.Answer)
+                                                        if (answer.type == 1)
                                                         {
-                                                            if (answer.type == 1)
+                                                            dns.ResouceRecords.Add(new ResouceRecord
                                                             {
-                                                                dns.ResouceRecords.Add(new ResouceRecord
-                                                                {
-                                                                    Datas = IPAddress.Parse(answer.data).GetAddressBytes(),
-                                                                    TTL = answer.TTL,
-                                                                    QueryClass = 1,
-                                                                    QueryType = QueryType.A
-                                                                });
-                                                            }
+                                                                Datas = IPAddress.Parse(answer.data).GetAddressBytes(),
+                                                                TTL = answer.TTL,
+                                                                QueryClass = 1,
+                                                                QueryType = QueryType.A
+                                                            });
                                                         }
-                                                        socket.SendTo(dns.ToBytes(), client);
-                                                        return;
                                                     }
+                                                    socket.SendTo(dns.ToBytes(), client);
+                                                    return;
                                                 }
                                             }
-                                            catch { }
                                         }
+                                        catch { }
                                     }
                                 }
                             }
@@ -640,7 +633,7 @@ namespace XboxDownload
             return ip;
         }
 
-        public static string DoH(string hostName, string dohServer = "dns.alidns.com") //"dns.alidns.com", "doh.pub", "doh.360.cn"
+        public static string DoH(string hostName, string dohServer = "dns.alidns.com")
         {
             string ip = string.Empty;
             if (Environment.OSVersion.Version.Major < 10 && dohServer == "dns.alidns.com")
