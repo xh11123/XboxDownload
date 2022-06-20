@@ -250,6 +250,10 @@ namespace XboxDownload
                                         byteIP = epicIP;
                                         argb = 0x008000;
                                         break;
+                                    case "www.msftconnecttest.com":
+                                        if (Properties.Settings.Default.HttpService)
+                                            byteIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+                                        break;
                                     default:
                                         if (Form1.dicHost.ContainsKey(queryName))
                                         {

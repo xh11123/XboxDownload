@@ -267,6 +267,19 @@ namespace XboxDownload
                                     }
                                 }
                             }
+                            else if (_hosts == "www.msftconnecttest.com" && _tmpPath.ToLower() == "/connecttest.txt") // 网络连接 (NCSI)，修复 Xbox、Windows 系统网络正常却显示离线
+                            {
+                                bFileNotFound = false;
+                                if (Form1.bRecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString());
+                                Byte[] _response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
+                                StringBuilder sb = new StringBuilder();
+                                sb.Append("HTTP/1.1 200 OK\r\n");
+                                sb.Append("Content-Type: text/html\r\n");
+                                sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                            }
                             if (bFileNotFound)
                             {
                                 if (Form1.bRecordLog)
