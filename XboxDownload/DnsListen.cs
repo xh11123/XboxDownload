@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -15,7 +16,7 @@ namespace XboxDownload
     class DnsListen
     {
         private readonly Form1 parentForm;
-        private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://dns.alidns.com" : "http://dns.alidns.com";
+        private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://223.5.5.5" : "http://223.5.5.5";
         Socket socket = null;
 
         public DnsListen(Form1 parentForm)
@@ -257,7 +258,6 @@ namespace XboxDownload
                                         }
                                         break;
                                 }
-                                if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
                                 if (byteIP != null)
                                 {
                                     dns.QR = 1;
@@ -274,6 +274,7 @@ namespace XboxDownload
                                         }
                                     };
                                     socket.SendTo(dns.ToBytes(), client);
+                                    if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + (new IPAddress(byteIP)), ((IPEndPoint)client).Address.ToString(), argb);
                                     return;
                                 }
                                 else if (Properties.Settings.Default.DoH)
@@ -295,11 +296,11 @@ namespace XboxDownload
                                                     dns.ResouceRecords = new List<ResouceRecord>();
                                                     foreach (var answer in json.Answer)
                                                     {
-                                                        if (answer.type == 1)
+                                                        if (answer.Type == 1 && IPAddress.TryParse(answer.Data, out IPAddress ipAddress))
                                                         {
                                                             dns.ResouceRecords.Add(new ResouceRecord
                                                             {
-                                                                Datas = IPAddress.Parse(answer.data).GetAddressBytes(),
+                                                                Datas = ipAddress.GetAddressBytes(),
                                                                 TTL = answer.TTL,
                                                                 QueryClass = 1,
                                                                 QueryType = QueryType.A
@@ -307,6 +308,7 @@ namespace XboxDownload
                                                         }
                                                     }
                                                     socket.SendTo(dns.ToBytes(), client);
+                                                    if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", json.Answer.Where(x => x.Type == 1).Select(x => x.Data).ToArray()), ((IPEndPoint)client).Address.ToString(), argb);
                                                     return;
                                                 }
                                             }
@@ -314,6 +316,7 @@ namespace XboxDownload
                                         catch { }
                                     }
                                 }
+                                if (Form1.bRecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
                             }
                             else // 屏蔽IPv6
                             {
@@ -464,7 +467,7 @@ namespace XboxDownload
         public int Opcode { get; set; } //0表示标准查询,1表示反向查询,2表示服务器状态请求
         public int AA { get; set; }  //授权回答
         public int TC { get; set; } //表示可截断的
-        public int RD { get; set; } //表示期望递归 
+        public int RD { get; set; } //表示期望递归
         public int RA { get; set; } //表示可用递归
         public int Rcode { get; set; } //0表示没有错误,3表示名字错误
 
@@ -531,7 +534,6 @@ namespace XboxDownload
 
             标志 = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(ReadBytes(2), 0));
 
-
             var b1 = ReadByte();
             var b2 = ReadByte();
 
@@ -560,7 +562,6 @@ namespace XboxDownload
             {
                 ResouceRecords.Add(new ResouceRecord(ReadBytes));
             }
-
         }
     }
 
@@ -576,8 +577,8 @@ namespace XboxDownload
             }
 
             return temp & mask;
-
         }
+
         public static byte SetBits(this byte b, int data, int start, int length)
         {
             var temp = b;
@@ -600,7 +601,7 @@ namespace XboxDownload
     {
         public static string HostToIP(string hostName = null, string dnsServer = null)
         {
-            string ip = string.Empty;
+            string ip = null;
             if (string.IsNullOrEmpty(dnsServer))
             {
                 try
@@ -633,10 +634,10 @@ namespace XboxDownload
             return ip;
         }
 
-        public static string DoH(string hostName, string dohServer = "dns.alidns.com")
+        public static string DoH(string hostName, string dohServer = "223.5.5.5")
         {
-            string ip = string.Empty;
-            if (Environment.OSVersion.Version.Major < 10 && dohServer == "dns.alidns.com")
+            string ip = null;
+            if (Environment.OSVersion.Version.Major < 10 && dohServer == "223.5.5.5")
                 dohServer = "http://" + dohServer;
             else
                 dohServer = "https://" + dohServer;
@@ -649,16 +650,9 @@ namespace XboxDownload
                     var json = js.Deserialize<ClassDNS.Api>(socketPackage.Html);
                     if (json != null && json.Answer != null)
                     {
-                        if (json.Status == 0)
+                        if (json.Status == 0 && json.Answer.Count >= 1)
                         {
-                            foreach (var answer in json.Answer)
-                            {
-                                if (answer.type == 1)
-                                {
-                                    ip = answer.data;
-                                    break;
-                                }
-                            }
+                            ip = json.Answer.Where(x => x.Type == 1).Select(x => x.Data).FirstOrDefault();
                         }
                     }
                 }
@@ -677,18 +671,21 @@ namespace XboxDownload
             public bool CD { get; set; }
             public class Question
             {
-                public string name { get; set; }
-                public int type { get; set; }
+                public string Name { get; set; }
+                public int Type { get; set; }
             }
             public List<Answer> Answer { get; set; }
+            public List<Answer> Authority { get; set; }
+            public List<Answer> Additional { get; set; }
+            public string Edns_client_subnet { get; set; }
         }
 
         public class Answer
         {
-            public string name { get; set; }
+            public string Name { get; set; }
             public int TTL { get; set; }
-            public int type { get; set; }
-            public string data { get; set; }
+            public int Type { get; set; }
+            public string Data { get; set; }
         }
     }
 }

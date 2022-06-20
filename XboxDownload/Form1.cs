@@ -411,9 +411,9 @@ namespace XboxDownload
 
         public void ButStart_Click(object sender, EventArgs e)
         {
-            butStart.Enabled = false;
             if (bServiceFlag)
             {
+                butStart.Enabled = false;
                 bServiceFlag = false;
                 WriteHost(false);
                 if (string.IsNullOrEmpty(Properties.Settings.Default.DnsIP)) tbDnsIP.Clear();
@@ -582,6 +582,7 @@ namespace XboxDownload
                         return;
                     }
                 }
+                butStart.Enabled = false;
 
                 Properties.Settings.Default.DnsIP = dnsIP;
                 Properties.Settings.Default.ComIP = comIP;
@@ -1824,6 +1825,7 @@ namespace XboxDownload
                 case "zeus.dl.playstation.net":
                 case "ares.dl.playstation.net":
                     {
+                        // ====================================================  有PS主机的玩家可以帮忙更新测速文件  ====================================================
                         LinkLabel lb1 = new LinkLabel()
                         {
                             Tag = "http://gst.prod.dl.playstation.net/gst/prod/00/PPSA01559_00/app/pkg/3/f_74b53478b371caae3fa56806be11f158fdbdc12d5dbf943fd070bb9d1f7536e8/HP0102-PPSA01559_00-VILLAGEFULLGAMEX_0.pkg",
@@ -2161,6 +2163,8 @@ namespace XboxDownload
 
         private void DgvHosts_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
+            dgvHosts.Rows[e.RowIndex].ErrorText = "";
+            if (dgvHosts.Rows[e.RowIndex].IsNewRow) return;
             switch (dgvHosts.Columns[e.ColumnIndex].Name)
             {
                 case "Col_IPv4":
@@ -2217,6 +2221,8 @@ namespace XboxDownload
                             dr["Remark"] = "Xbox360主机下载域名";
                             dtHost.Rows.Add(dr);
                         }
+                        dgvHosts.ClearSelection();
+                        dgvHosts.Rows.Cast<DataGridViewRow>().Where(r => r.Cells["Col_HostName"].Value.ToString() == hostNames[0]).Select(r => r).FirstOrDefault().Cells["Col_IPv4"].Selected = true;
                     }
                 }
                 else
@@ -2234,7 +2240,7 @@ namespace XboxDownload
                             dnsServer = "8.8.8.8";
                             break;
                         default:
-                            dnsServer = "dns.alidns.com";
+                            dnsServer = "223.5.5.5";    //dns.alidns.com
                             break;
                     }
                     string hostname = result.Groups["hostname"].Value.ToLower();
@@ -2258,15 +2264,7 @@ namespace XboxDownload
                     });
                     dr["Remark"] = remark;
                     dgvHosts.ClearSelection();
-                    foreach (DataGridViewRow dgvr in dgvHosts.Rows)
-                    {
-                        if (dgvr.IsNewRow) break;
-                        if (dgvr.Cells["Col_HostName"].Value.ToString() == hostname)
-                        {
-                            dgvr.Cells["Col_IPv4"].Selected = true;
-                            break;
-                        }
-                    }
+                    dgvHosts.Rows.Cast<DataGridViewRow>().Where(r => r.Cells["Col_HostName"].Value.ToString() == hostname).Select(r => r).FirstOrDefault().Cells["Col_IPv4"].Selected = true;
                 }
             }
         }

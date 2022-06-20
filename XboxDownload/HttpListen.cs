@@ -234,12 +234,12 @@ namespace XboxDownload
                                                 string html = Encoding.GetEncoding("utf-8").GetString(socketPackage.Buffer);
                                                 JavaScriptSerializer js = new JavaScriptSerializer();
                                                 var json = js.Deserialize<PsGame.Game>(html);
-                                                if (json != null && json.pieces != null && json.pieces.Count >= 1)
+                                                if (json != null && json.Pieces != null && json.Pieces.Count >= 1)
                                                 {
                                                     StringBuilder sb = new StringBuilder();
-                                                    sb.AppendLine("下载文件总数：" + json.numberOfSplitFiles + "，容量：" + ClassMbr.ConvertBytes(Convert.ToUInt64(json.originalFileSize)) + "，下载地址：");
-                                                    foreach (var pieces in json.pieces)
-                                                        sb.AppendLine(pieces.url);
+                                                    sb.AppendLine("下载文件总数：" + json.NumberOfSplitFiles + "，容量：" + ClassMbr.ConvertBytes(Convert.ToUInt64(json.OriginalFileSize)) + "，下载地址：");
+                                                    foreach (var pieces in json.Pieces)
+                                                        sb.AppendLine(pieces.Url);
                                                     parentForm.SaveLog("下载地址", sb.ToString(), ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString(), 0x008000);
                                                 }
                                             }

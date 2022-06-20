@@ -249,14 +249,14 @@ namespace XboxDownload
     {
         public class Game
         {
-            public long originalFileSize { get; set; }
-            public int numberOfSplitFiles { get; set; }
-            public List<pieces> pieces { get; set; }
+            public long OriginalFileSize { get; set; }
+            public int NumberOfSplitFiles { get; set; }
+            public List<Pieces> Pieces { get; set; }
         }
 
-        public class pieces
+        public class Pieces
         {
-            public string url { get; set; }
+            public string Url { get; set; }
         }
     }
 }

@@ -58,6 +58,7 @@ namespace XboxDownload
                 parentForm.Invoke(new Action(() =>
                 {
                     MessageBox.Show("检查更新出错，请稍候再试。", "软件更新", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (!autoupdate) parentForm.tsmUpdate.Enabled = true;
                 }));
             }
         }
